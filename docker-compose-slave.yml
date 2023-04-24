@@ -1,0 +1,31 @@
+version: "3.5"
+
+services:
+
+  tarantool2: #slave
+    restart: unless-stopped
+    healthcheck:
+      test: tarantool_is_up
+      interval: 60s
+      timeout: 15s
+      retries: 10
+    image: tarantool/tarantool:2.8.2
+    volumes:
+      - ./db-data/slave:/var/lib/tarantool
+      - ./lua-scripts:/opt/scripts
+    command: tarantool /opt/scripts/slave.lua
+    environment:
+      - TARANTOOL_USER_NAME=admin
+      - TARANTOOL_USER_PASSWORD=pass
+    ports:
+      - "13301:3301"
+
+  tarantool-admin:
+    restart: unless-stopped
+    image: quay.io/basis-company/tarantool-admin:0.7.3
+    ports:
+      - "8888:80"
+    environment:
+      - "TARANTOOL_TCP_NODELAY=1"
+      - "TARANTOOL_DATABASE_QUERY=1"
+      - "TARANTOOL_CONNECTIONS=tarantool1:3301"
