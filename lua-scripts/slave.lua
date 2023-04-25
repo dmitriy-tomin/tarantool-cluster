@@ -1,10 +1,9 @@
 box.cfg{
     listen = 3301,
     replication = {
-        'replicator:password@tarantool1:3301', -- master URI
-        'replicator:password@tarantool2:3301', -- replica 1 URI
+        'replicator:password@10.129.0.10:13301, -- master URI
     },
-    read_only = true -- set to true for replica 1 and 2 if you want master-slave
+    read_only = true -- mode replica
 }
 box.once("schema", function()
     box.schema.user.create('replicator', {password = 'password'})
