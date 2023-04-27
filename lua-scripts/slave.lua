@@ -1,7 +1,7 @@
 box.cfg{
     listen = 3301,
     replication = {
-        'replicator:password@10.129.0.10:13301, -- master URI
+        'replicator:password@10.129.0.10:13301', -- master URI
     },
     read_only = true -- mode replica
 }
